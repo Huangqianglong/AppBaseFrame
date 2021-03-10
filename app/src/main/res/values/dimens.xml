@@ -1,0 +1,7 @@
+<resources>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="toast_width">18dp</dimen>
+    <dimen name="toast_text_size">30sp</dimen>
+    <dimen name="toast_padding">18dp</dimen>
+    <dimen name="toast_bg_radius">3dp</dimen>
+</resources>
