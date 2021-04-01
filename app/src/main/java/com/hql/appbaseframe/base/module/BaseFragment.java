@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.os.MessageQueue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +33,7 @@ public abstract class BaseFragment<Y extends IFragmentBasePresent> extends Fragm
             super.handleMessage(msg);
             switch (msg.what) {
                 case ACTION_INIT:
-                    lazyLoad();
+                    lazyLoadData();
                     onCreatePresent();
                     mPresent.init();
                     break;
@@ -128,11 +129,18 @@ public abstract class BaseFragment<Y extends IFragmentBasePresent> extends Fragm
      * 可见, 执行延迟加载
      */
     protected void onVisible() {
-        if (isFirstLoad && getView() != null) {
-            //如果这里执行处理，实际上view未真正加载到窗口，故这里延迟加载，让view先显示出来，优化体验
-            mBaseHandler.sendEmptyMessageDelayed(ACTION_INIT,100);
-            isFirstLoad = false;
-        }
+        Looper.myQueue().addIdleHandler(new MessageQueue.IdleHandler() {
+            @Override
+            public boolean queueIdle() {
+                if (isFirstLoad && getView() != null) {
+                    //如果这里执行处理，实际上view未真正加载到窗口，故这里延迟加载，让view先显示出来，优化体验
+                    mBaseHandler.sendEmptyMessageDelayed(ACTION_INIT,0);
+                    isFirstLoad = false;
+                }
+                return false;
+            }
+        });
+
     }
 
     public void resetData() {
@@ -156,5 +164,5 @@ public abstract class BaseFragment<Y extends IFragmentBasePresent> extends Fragm
     /**
      * 延迟加载，可以作为第一次显示的时候加载数据
      */
-    protected abstract void lazyLoad();
+    protected abstract void lazyLoadData();
 }

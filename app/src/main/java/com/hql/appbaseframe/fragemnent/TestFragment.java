@@ -35,7 +35,7 @@ public class TestFragment extends BaseFragment<ITestPresenter> implements ITestF
     }
 
     @Override
-    protected void lazyLoad() {
+    protected void lazyLoadData() {
 
     }
 

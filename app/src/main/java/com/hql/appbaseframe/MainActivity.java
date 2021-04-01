@@ -9,11 +9,12 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.hql.appbaseframe.base.module.BaseActivity;
 import com.hql.appbaseframe.base.utils.LoggerUtil;
 import com.hql.appbaseframe.base.utils.TextUtils;
 import com.hql.appbaseframe.fragemnent.TestFragment;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends BaseActivity {
     private TestFragment mTestFragment;
     private FragmentManager mFragmentManager;
     private RelativeLayout mFragmentContainer;
@@ -23,8 +24,8 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        initFragmentConfig(this);
+//        setContentView(R.layout.activity_main);
+//        initFragmentConfig(this);
 
     }
 
@@ -87,4 +88,15 @@ public class MainActivity extends FragmentActivity {
         }
     }
 
+    @Override
+    public void initView() {
+        LoggerUtil.d(TAG,"设置布局");
+        setContentView(R.layout.activity_main);
+    }
+
+    @Override
+    public void initData() {
+        LoggerUtil.d(TAG,"初始化数据");
+        initFragmentConfig(this);
+    }
 }
