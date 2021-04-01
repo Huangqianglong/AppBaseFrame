@@ -9,7 +9,9 @@ import android.os.Message;
 import android.os.RemoteException;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.hql.sdk.IServiceHolder;
+import com.hql.sdk.base.JsonData;
 import com.hql.sdk.client.TestClientBean;
 import com.hql.sdk.service.IServiceResultListener;
 import com.hql.sdk.service.TestServiceBackBean;
@@ -21,6 +23,7 @@ import com.hql.sdk.utils.LoggerUtil;
  * <br /> Description :
  */
 public class MyService extends Service {
+    private Gson mGson;
     private IServiceResultListener mListener;
     private Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
@@ -30,6 +33,12 @@ public class MyService extends Service {
     };
 
     @Override
+    public void onCreate() {
+        super.onCreate();
+        mGson = new Gson();
+    }
+
+    @Override
     public IBinder onBind(Intent intent) {
         return new SDKBinder();
     }
@@ -37,15 +46,22 @@ public class MyService extends Service {
     private class SDKBinder extends IServiceHolder.Stub {
 
         @Override
-        public void sendClientMsg(TestClientBean clientBean) throws RemoteException {
+        public void sendClientMsg(final TestClientBean clientBean) throws RemoteException {
+            JsonData data = mGson.fromJson(clientBean.getJsonData(), JsonData.class);
             LoggerUtil.d("hql", "收到客户端发送消息 getCustomMsg:" + clientBean.getCustomMsg()
                     + ">default>" + clientBean.getMsg()
+                    + ">json>" + data.getParamz().getFeeds().get(0).getData().getSummary()
             );
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        mListener.onServiceCallBack(new TestServiceBackBean("服务返回数据！！！！"));
+                        TestServiceBackBean bean =    new TestServiceBackBean("服务返回数据！！！！");
+                        JsonData newData = mGson.fromJson(clientBean.getJsonData(), JsonData.class);
+
+                        newData.getParamz().getFeeds().get(0).getData().setSummary("这是改过的Summary");
+                        bean.setJsonData(mGson.toJson(newData));
+                        mListener.onServiceCallBack(bean);
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }

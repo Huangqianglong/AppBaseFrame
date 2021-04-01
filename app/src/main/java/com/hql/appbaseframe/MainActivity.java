@@ -10,10 +10,12 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.gson.Gson;
 import com.hql.appbaseframe.base.module.BaseActivity;
 import com.hql.appbaseframe.base.utils.LoggerUtil;
 import com.hql.appbaseframe.base.utils.TextUtils;
 import com.hql.appbaseframe.fragemnent.TestFragment;
+import com.hql.sdk.base.JsonData;
 import com.hql.sdk.client.IResultListener;
 import com.hql.sdk.client.TestClientBean;
 import com.hql.sdk.control.SDKManger;
@@ -25,6 +27,7 @@ public class MainActivity extends BaseActivity {
     private RelativeLayout mFragmentContainer;
     private Fragment mCurrentFragment;
     private static final String TAG = MainActivity.class.getSimpleName();
+    private Gson mGson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,11 +105,35 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void initData() {
+        mGson = new Gson();
         LoggerUtil.d(TAG, "初始化数据");
         initFragmentConfig(this);
         SDKManger.getInstance().getAPI().setOnResultListener(resultListener);
         TestClientBean testClientBean = new TestClientBean("这是hql发的测试数据");
-        LoggerUtil.d(TAG,">>>>>>>初始化发送   "+testClientBean.getCustomMsg());
+        testClientBean.setJsonData("{\n" +
+                "  \"paramz\": {\n" +
+                "    \"feeds\": [\n" +
+                "      {\n" +
+                "        \"id\": 299076,\n" +
+                "        \"oid\": 288340,\n" +
+                "        \"category\": \"article\",\n" +
+                "        \"data\": {\n" +
+                "          \"subject\": \"荔枝新闻3.0：不止是阅读\",\n" +
+                "          \"summary\": \"江苏广电旗下资讯类手机应用“荔枝新闻”于近期推出全新升级换代的3.0版。\",\n" +
+                "          \"cover\": \"/Attachs/Article/288340/3e8e2c397c70469f8845fad73aa38165_padmini.JPG\",\n" +
+                "          \"pic\": \"\",\n" +
+                "          \"format\": \"txt\",\n" +
+                "          \"changed\": \"2015-09-22 16:01:41\"\n" +
+                "        }\n" +
+                "      }\n" +
+                "    ],\n" +
+                "    \"PageIndex\": 1,\n" +
+                "    \"PageSize\": 20,\n" +
+                "    \"TotalCount\": 53521,\n" +
+                "    \"TotalPage\": 2677\n" +
+                "  }\n" +
+                "}");
+        LoggerUtil.d(TAG, ">>>>>>>初始化发送   " + testClientBean.getCustomMsg());
         SDKManger.getInstance().getAPI().sentTestData(testClientBean);
 
     }
@@ -114,8 +141,11 @@ public class MainActivity extends BaseActivity {
     IResultListener.Stub resultListener = new IResultListener.Stub() {
         @Override
         public void onSendClientMsg(TestServiceBackBean serviceBackBean) throws RemoteException {
+            JsonData jsonData = mGson.fromJson(serviceBackBean.getJsonData(), JsonData.class);
             LoggerUtil.d(TAG, ">>>>>>>客户端收到服务端返回数据：" + serviceBackBean.getCustomMsg()
-                    + ">default>" + serviceBackBean.getData());
+                    + ">default>" + serviceBackBean.getData()
+                    + ">default>" + jsonData.getParamz().getFeeds().get(0).getData().getSummary()
+            );
         }
     };
 }

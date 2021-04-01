@@ -22,6 +22,10 @@ public class BaseModel implements Parcelable {
      * 回调ID
      */
     private int callBackID;
+    /**
+     * json格式数据
+     */
+    private String jsonData;
     public BaseModel(){
 
     }
@@ -29,6 +33,7 @@ public class BaseModel implements Parcelable {
         protocolType = in.readInt();
         packageName = in.readString();
         callBackID = in.readInt();
+        jsonData = in.readString();
     }
 
     public static final Creator<BaseModel> CREATOR = new Creator<BaseModel>() {
@@ -53,6 +58,7 @@ public class BaseModel implements Parcelable {
         dest.writeInt(protocolType);
         dest.writeString(packageName);
         dest.writeInt(callBackID);
+        dest.writeString(jsonData);
     }
 
 
@@ -78,5 +84,13 @@ public class BaseModel implements Parcelable {
 
     public void setCallBackID(int callBackID) {
         this.callBackID = callBackID;
+    }
+
+    public String getJsonData() {
+        return jsonData;
+    }
+
+    public void setJsonData(String jsonData) {
+        this.jsonData = jsonData;
     }
 }
