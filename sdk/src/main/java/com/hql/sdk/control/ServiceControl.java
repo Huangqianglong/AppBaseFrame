@@ -27,13 +27,13 @@ public class ServiceControl {
     private static final String SERVICE_ACTION_NAME = "com.hql.test_service";
     private IServiceHolder mService;
     private boolean isBindService;
-    private final static String TAG = ServiceControl.class.getSimpleName();
+    private final static String TAG = ServiceControl.class.getSimpleName()+"hql";
     private Handler mHandler = new Handler(Looper.getMainLooper());
     private Context mContext;
     /**
      * sdk--> client的回调
      */
-    private IResultListener mClientListenr;
+    private IResultListener mClientListener;
 
     public ServiceControl(Context context) {
         mContext = context;
@@ -53,14 +53,15 @@ public class ServiceControl {
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
+            LoggerUtil.d(TAG, "服务断开，重新绑定");
             isBindService = false;
             mService = null;
             boolean res = tryToBindService();
         }
     };
 
-    public void release(Context context) {
-        context.unbindService(mConnection);
+    public void onDestroy() {
+        mContext.unbindService(mConnection);
     }
 
     public int sentTestData(TestClientBean bean) {
@@ -79,8 +80,8 @@ public class ServiceControl {
     IServiceResultListener.Stub mListener = new IServiceResultListener.Stub() {
         @Override
         public void onServiceCallBack(TestServiceBackBean serviceBackBean) throws RemoteException {
-            if (null != mClientListenr) {
-                mClientListenr.onSendClientMsg(serviceBackBean);
+            if (null != mClientListener) {
+                mClientListener.onSendClientMsg(serviceBackBean);
             }
         }
     };
@@ -113,7 +114,7 @@ public class ServiceControl {
     };
 
     public int setOnResultListener(IResultListener listener) {
-        mClientListenr = listener;
+        mClientListener = listener;
         return STATE_CODE.SERVICE_OK;
     }
 }

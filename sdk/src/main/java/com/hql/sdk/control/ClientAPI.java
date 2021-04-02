@@ -12,20 +12,25 @@ import com.hql.sdk.client.TestClientBean;
 public class ClientAPI {
     private ServiceControl mServiceControl;
 
-    public ClientAPI(ServiceControl control){
-        mServiceControl =  control;
+    public ClientAPI(ServiceControl control) {
+        mServiceControl = control;
     }
 
-    public int setOnResultListener(IResultListener listener){
+    public int setOnResultListener(IResultListener listener) {
         if (null != mServiceControl) {
-            return  mServiceControl.setOnResultListener(listener );
+            return mServiceControl.setOnResultListener(listener);
         }
         return STATE_CODE.SERVICE_DISCONNECT;
     }
+
     public int sentTestData(TestClientBean bean) {
         if (null != mServiceControl) {
-            return  mServiceControl.sentTestData(bean);
+            return mServiceControl.sentTestData(bean);
         }
         return STATE_CODE.SERVICE_DISCONNECT;
+    }
+
+    public void onDestroy() {
+
     }
 }

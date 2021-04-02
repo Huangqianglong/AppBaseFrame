@@ -10,8 +10,10 @@ import android.content.Context;
 public class SDKManger {
     private ClientAPI mClientAPI;
     private ServiceControl mServiceControl;
+    private Object test;
 
     private SDKManger() {
+        test = new Object();
     }
 
 
@@ -30,16 +32,22 @@ public class SDKManger {
         if (null == mClientAPI) {
             mClientAPI = new ClientAPI(mServiceControl);
         }
-
     }
 
-    public void relase(Context context) {
-        if (null == mServiceControl) {
-            mServiceControl.release(context);
+    public void destroy() {
+        if (null != mServiceControl) {
+            mServiceControl.onDestroy();
+        }
+        if (null != mClientAPI) {
+            mClientAPI.onDestroy();
         }
     }
 
     public ClientAPI getAPI() {
         return mClientAPI;
+    }
+
+    public Object getTest() {
+        return test;
     }
 }

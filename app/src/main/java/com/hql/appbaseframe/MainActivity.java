@@ -50,6 +50,7 @@ public class MainActivity extends BaseActivity {
 
     }
 
+
     private void createFragment() {
         mTestFragment = new TestFragment();
         showFragment(mTestFragment, TestFragment.class.getSimpleName());
@@ -109,6 +110,26 @@ public class MainActivity extends BaseActivity {
         LoggerUtil.d(TAG, "初始化数据");
         initFragmentConfig(this);
         SDKManger.getInstance().getAPI().setOnResultListener(resultListener);
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SDKManger.getInstance().destroy();
+    }
+
+    IResultListener.Stub resultListener = new IResultListener.Stub() {
+        @Override
+        public void onSendClientMsg(TestServiceBackBean serviceBackBean) throws RemoteException {
+            JsonData jsonData = mGson.fromJson(serviceBackBean.getJsonData(), JsonData.class);
+            LoggerUtil.d(TAG, ">>>>>>>客户端收到服务端返回数据：" + serviceBackBean.getCustomMsg()
+                    + ">default>" + serviceBackBean.getData()
+                    + ">default>" + jsonData.getParamz().getFeeds().get(0).getData().getSummary()
+            );
+        }
+    };
+    public void sendMsg2Service(View view){
         TestClientBean testClientBean = new TestClientBean("这是hql发的测试数据");
         testClientBean.setJsonData("{\n" +
                 "  \"paramz\": {\n" +
@@ -137,15 +158,4 @@ public class MainActivity extends BaseActivity {
         SDKManger.getInstance().getAPI().sentTestData(testClientBean);
 
     }
-
-    IResultListener.Stub resultListener = new IResultListener.Stub() {
-        @Override
-        public void onSendClientMsg(TestServiceBackBean serviceBackBean) throws RemoteException {
-            JsonData jsonData = mGson.fromJson(serviceBackBean.getJsonData(), JsonData.class);
-            LoggerUtil.d(TAG, ">>>>>>>客户端收到服务端返回数据：" + serviceBackBean.getCustomMsg()
-                    + ">default>" + serviceBackBean.getData()
-                    + ">default>" + jsonData.getParamz().getFeeds().get(0).getData().getSummary()
-            );
-        }
-    };
 }

@@ -20,5 +20,14 @@
         android:textSize="30sp"
         android:onClick="loadFragment"
         />
+    <TextView
+        android:layout_below="@+id/tv_load_fragment"
+        android:id="@+id/tv_send_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="向服务端发消息"
+        android:textSize="30sp"
+        android:onClick="sendMsg2Service"
+        />
 
 </RelativeLayout>
