@@ -2,11 +2,14 @@ package com.hql.sdk.control;
 
 import android.content.Context;
 
+import androidx.annotation.Keep;
+
 /**
  * @author ly-huangql
  * <br /> Create time : 2021/4/1
  * <br /> Description : 负责和服务的连接，和对服务的操作
  */
+
 public class SDKManger {
     private ClientAPI mClientAPI;
     private ServiceControl mServiceControl;

@@ -32,6 +32,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 //        setContentView(R.layout.activity_main);
 //        initFragmentConfig(this);
 
@@ -125,7 +126,7 @@ public class MainActivity extends BaseActivity {
 
     IResultListener.Stub resultListener = new IResultListener.Stub() {
         @Override
-        public void onSendClientMsg(TestServiceBackBean serviceBackBean) throws RemoteException {
+        public void onSendClientMsg(TestServiceBackBean serviceBackBean)  {
             JsonData jsonData = mGson.fromJson(serviceBackBean.getJsonData(), JsonData.class);
             LoggerUtil.d(TAG, ">>>>>>>客户端收到服务端返回数据：" + serviceBackBean.getCustomMsg()
                     + ">default>" + serviceBackBean.getData()
@@ -160,6 +161,7 @@ public class MainActivity extends BaseActivity {
                 "}");
         LoggerUtil.d(TAG, ">>>>>>>初始化发送   " + testClientBean.getCustomMsg());
         SDKManger.getInstance().getAPI().sentTestData(testClientBean);
+
 
     }
 }

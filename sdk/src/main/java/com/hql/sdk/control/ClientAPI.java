@@ -1,5 +1,7 @@
 package com.hql.sdk.control;
 
+import androidx.annotation.Keep;
+
 import com.hql.sdk.base.STATE_CODE;
 import com.hql.sdk.client.IResultListener;
 import com.hql.sdk.client.TestClientBean;
@@ -9,6 +11,7 @@ import com.hql.sdk.client.TestClientBean;
  * <br /> Create time : 2021/4/1
  * <br /> Description : 提供给客户端调用的接口
  */
+
 public class ClientAPI {
     private ServiceControl mServiceControl;
 
