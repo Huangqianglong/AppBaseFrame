@@ -20,6 +20,7 @@ public abstract class BaseActivity extends FragmentActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(getLayoutID());
         initView();
     }
     @Override
@@ -39,4 +40,5 @@ public abstract class BaseActivity extends FragmentActivity {
     }
     public abstract void initView();
     public abstract void initData();
+    public abstract int getLayoutID();
 }

@@ -43,6 +43,7 @@ public class ServiceControl {
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
+            LoggerUtil.d(TAG,"服务连接成功");
             mService = IServiceHolder.Stub.asInterface(service);
             try {
                 mService.setOnServiceListener(mListener);
@@ -61,7 +62,10 @@ public class ServiceControl {
     };
 
     public void onDestroy() {
-        mContext.unbindService(mConnection);
+        if(isBindService){
+            mContext.unbindService(mConnection);
+            isBindService = false;
+        }
     }
 
     public int sentTestData(TestClientBean bean) {
@@ -87,6 +91,7 @@ public class ServiceControl {
     };
 
     private boolean tryToBindService() {
+        LoggerUtil.d(TAG,"尝试连接服务");
         mHandler.removeCallbacks(bindRunnable);
         try {
             Intent intent = new Intent();

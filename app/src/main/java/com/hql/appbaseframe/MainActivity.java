@@ -101,7 +101,6 @@ public class MainActivity extends BaseActivity {
     public void initView() {
         LoggerUtil.d(TAG, "设置布局");
         SDKManger.getInstance().init(this);
-        setContentView(R.layout.activity_main);
     }
 
     @Override
@@ -111,6 +110,11 @@ public class MainActivity extends BaseActivity {
         initFragmentConfig(this);
         SDKManger.getInstance().getAPI().setOnResultListener(resultListener);
 
+    }
+
+    @Override
+    public int getLayoutID() {
+        return R.layout.activity_main;
     }
 
     @Override

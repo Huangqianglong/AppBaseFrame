@@ -37,9 +37,11 @@ public class SDKManger {
     public void destroy() {
         if (null != mServiceControl) {
             mServiceControl.onDestroy();
+            mServiceControl = null;
         }
         if (null != mClientAPI) {
             mClientAPI.onDestroy();
+            mClientAPI = null;
         }
     }
 
