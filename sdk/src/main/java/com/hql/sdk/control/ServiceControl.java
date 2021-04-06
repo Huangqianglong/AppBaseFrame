@@ -9,12 +9,12 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.RemoteException;
 
-import com.hql.sdk.IServiceHolder;
+import com.hql.sdk.aidl.IServiceHolder;
+import com.hql.sdk.aidl.client.IResultListener;
+import com.hql.sdk.aidl.client.TestClientBean;
+import com.hql.sdk.aidl.service.IServiceResultListener;
+import com.hql.sdk.aidl.service.TestServiceBackBean;
 import com.hql.sdk.base.STATE_CODE;
-import com.hql.sdk.client.IResultListener;
-import com.hql.sdk.client.TestClientBean;
-import com.hql.sdk.service.IServiceResultListener;
-import com.hql.sdk.service.TestServiceBackBean;
 import com.hql.sdk.utils.LoggerUtil;
 
 /**
@@ -27,7 +27,7 @@ public class ServiceControl {
     private static final String SERVICE_ACTION_NAME = "com.hql.test_service";
     private IServiceHolder mService;
     private boolean isBindService;
-    private final static String TAG = ServiceControl.class.getSimpleName()+"hql";
+    private final static String TAG = ServiceControl.class.getSimpleName() + "hql";
     private Handler mHandler = new Handler(Looper.getMainLooper());
     private Context mContext;
     /**
@@ -43,7 +43,7 @@ public class ServiceControl {
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            LoggerUtil.d(TAG,"服务连接成功");
+            LoggerUtil.d(TAG, "服务连接成功");
             mService = IServiceHolder.Stub.asInterface(service);
             try {
                 mService.setOnServiceListener(mListener);
@@ -62,7 +62,7 @@ public class ServiceControl {
     };
 
     public void onDestroy() {
-        if(isBindService){
+        if (isBindService) {
             mContext.unbindService(mConnection);
             isBindService = false;
         }
@@ -91,7 +91,7 @@ public class ServiceControl {
     };
 
     private boolean tryToBindService() {
-        LoggerUtil.d(TAG,"尝试连接服务");
+        LoggerUtil.d(TAG, "尝试连接服务");
         mHandler.removeCallbacks(bindRunnable);
         try {
             Intent intent = new Intent();

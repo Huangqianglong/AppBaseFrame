@@ -1,7 +1,6 @@
 package com.hql.appbaseframe;
 
 import android.os.Bundle;
-import android.os.RemoteException;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -15,11 +14,11 @@ import com.hql.appbaseframe.base.module.BaseActivity;
 import com.hql.appbaseframe.base.utils.LoggerUtil;
 import com.hql.appbaseframe.base.utils.TextUtils;
 import com.hql.appbaseframe.fragemnent.TestFragment;
+import com.hql.sdk.aidl.client.IResultListener;
+import com.hql.sdk.aidl.client.TestClientBean;
+import com.hql.sdk.aidl.service.TestServiceBackBean;
 import com.hql.sdk.base.JsonData;
-import com.hql.sdk.client.IResultListener;
-import com.hql.sdk.client.TestClientBean;
 import com.hql.sdk.control.SDKManger;
-import com.hql.sdk.service.TestServiceBackBean;
 
 public class MainActivity extends BaseActivity {
     private TestFragment mTestFragment;
@@ -121,12 +120,12 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        SDKManger.getInstance().destroy();
+        com.hql.sdk.control.SDKManger.getInstance().destroy();
     }
 
     IResultListener.Stub resultListener = new IResultListener.Stub() {
         @Override
-        public void onSendClientMsg(TestServiceBackBean serviceBackBean)  {
+        public void onSendClientMsg(TestServiceBackBean serviceBackBean) {
             JsonData jsonData = mGson.fromJson(serviceBackBean.getJsonData(), JsonData.class);
             LoggerUtil.d(TAG, ">>>>>>>客户端收到服务端返回数据：" + serviceBackBean.getCustomMsg()
                     + ">default>" + serviceBackBean.getData()
@@ -134,7 +133,8 @@ public class MainActivity extends BaseActivity {
             );
         }
     };
-    public void sendMsg2Service(View view){
+
+    public void sendMsg2Service(View view) {
         TestClientBean testClientBean = new TestClientBean("这是hql发的测试数据");
         testClientBean.setJsonData("{\n" +
                 "  \"paramz\": {\n" +

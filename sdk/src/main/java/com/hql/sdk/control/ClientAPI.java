@@ -1,10 +1,9 @@
 package com.hql.sdk.control;
 
-import androidx.annotation.Keep;
 
+import com.hql.sdk.aidl.client.IResultListener;
+import com.hql.sdk.aidl.client.TestClientBean;
 import com.hql.sdk.base.STATE_CODE;
-import com.hql.sdk.client.IResultListener;
-import com.hql.sdk.client.TestClientBean;
 
 /**
  * @author ly-huangql

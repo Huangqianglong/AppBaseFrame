@@ -14,12 +14,12 @@ import android.os.RemoteException;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.hql.sdk.IServiceHolder;
+import com.hql.sdk.aidl.IServiceHolder;
+import com.hql.sdk.aidl.client.TestClientBean;
+import com.hql.sdk.aidl.service.IServiceResultListener;
+import com.hql.sdk.aidl.service.TestServiceBackBean;
 import com.hql.sdk.base.JsonData;
-import com.hql.sdk.client.TestClientBean;
 import com.hql.sdk.control.SDKManger;
-import com.hql.sdk.service.IServiceResultListener;
-import com.hql.sdk.service.TestServiceBackBean;
 import com.hql.sdk.utils.LoggerUtil;
 
 /**

@@ -1,6 +1,14 @@
 apply plugin: 'com.android.library'
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('D:\\gitWorkSpace\\AppBaseFrame\\key\\release.jks')
+            storePassword '123qweasd'
+            keyAlias = 'key0'
+            keyPassword '123qweasd'
+        }
+    }
     compileSdkVersion 30
     buildToolsVersion "30.0.0"
 
@@ -22,8 +30,14 @@ android {
             minifyEnabled true
             consumerProguardFiles 'proguard-rules.pro'
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            //signingConfig signingConfigs.release
+            signingConfig signingConfigs.release
         }
+    }
+    sourceSets{
+        main{
+            java.srcDirs = ['src/main/java', 'src/main/aidl']
+        }
+
     }
 
 }
