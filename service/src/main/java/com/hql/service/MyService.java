@@ -75,7 +75,7 @@ public class MyService extends Service {
     private class SDKBinder extends IServiceHolder.Stub {
 
         @Override
-        public void sendClientMsg(final TestClientBean clientBean) throws RemoteException {
+        public void sendClientMsg(final TestClientBean clientBean)   {
             JsonData data = mGson.fromJson(clientBean.getJsonData(), JsonData.class);
             LoggerUtil.d("hql", "收到客户端发送消息 getCustomMsg:" + clientBean.getCustomMsg()
                     + ">default>" + clientBean.getMsg()
@@ -84,22 +84,20 @@ public class MyService extends Service {
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    try {
+
                         TestServiceBackBean bean = new TestServiceBackBean("服务返回数据！！！！");
                         JsonData newData = mGson.fromJson(clientBean.getJsonData(), JsonData.class);
 
                         newData.getParamz().getFeeds().get(0).getData().setSummary("这是改过的Summary");
                         bean.setJsonData(mGson.toJson(newData));
                         mListener.onServiceCallBack(bean);
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
-                    }
+
                 }
             }, 5000);
         }
 
         @Override
-        public void setOnServiceListener(IServiceResultListener listener) throws RemoteException {
+        public void setOnServiceListener(IServiceResultListener listener)  {
             Log.d("hql", "收到SDK 设置的服务回调 ");
             mListener = listener;
         }

@@ -30,10 +30,16 @@
 ##}
 ###--------------------------1.实体类---------------------------------
 ### 如果使用了Gson之类的工具要使被它解析的JavaBean类即实体类不被混淆。（这里填写自己项目中存放bean对象的具体路径）
+-dontshrink
+-keep class com.hql.sdk.aidl.**{*; }
 -keep class com.hql.sdk.base.**{*; }
--keep class com.hql.sdk.base.**{*; }
+-keep class com.hql.sdk.utils.**{*; }
 -keep class com.hql.sdk.client.**{*; }
 -keep class com.hql.sdk.servic.**{*; }
+#control这个包只能每个文件去做处理
+-keep class com.hql.sdk.control.ClientAPI{*; }#不混淆
+-keep class com.hql.sdk.control.SDKManger{*; }#不混淆
+-keep public class com.hql.sdk.control.ServiceControl#混淆ServiceControl
 #-keep class com.hql.sdk.control.**{*; }
 #-keep  class * com.hql.sdk.control.ClientAPI
 #-keep  class * com.hql.sdk.control.ServiceControl
@@ -344,6 +350,6 @@
 #
 #
 -keep class **.BuildConfig { *; }
--keep class com.hql.sdk.utils { *; }
+-keep class com.hql.sdk.utils.** { *; }
 
 
